@@ -2,10 +2,10 @@
 
 By [Allison Parrish](https://www.decontextualize.com/)
 
-Sea Duck is a rough-draft JavaScript framework for producing narratives through
-simulation. All you have to do is define a list of nouns, a list of actions
-that happen to those nouns (thereby producing events), and a
-[Tracery](http://tracery.io) grammar to turn those events into text.
+Sea Duck is a minimally opinionated rough-draft JavaScript framework for
+producing narratives through simulation. All you have to do is define a list of
+nouns, a list of actions that happen to those nouns (thereby producing events),
+and a [Tracery](http://tracery.io) grammar to turn those events into text.
 
 Note: This library uses a number of ES6 features
 ([maps](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map),
@@ -13,6 +13,19 @@ Note: This library uses a number of ES6 features
 functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*))
 and I haven't used a transpiler or anything to provide backwards compatibility.
 Internet Explorer probably won't work (but Edge probably will?). Sorry!
+
+I made this framework primarily as a toy for experimentation and teaching,
+because I couldn't find any similar frameworks (available in a more-or-less
+complete form to the general public) that make it easy to get started with
+making narratives from simulated events. The idea was to facilitate quick
+prototypes for projects along the lines of Darius Kazemi's [Teens Wander Around
+A House](http://tinysubversions.com/nanogenmo/novel-2.pdf) ([NaNoGenMo thread
+here](https://github.com/dariusk/NaNoGenMo/issues/2)) As a consequence, this
+framework doesn't contain a built-in world model, or a system for solving
+constraints or action planning (though you could implement any of those things
+yourself on top of the framework).
+
+Pull requests or suggestions for overall architecture are solicited.
 
 ## Installation
 
@@ -50,8 +63,11 @@ editor](https://editor.p5js.org/):
 ## Concepts and usage
 
 The purpose of a Sea Duck narrative is to generate sentences from events that
-transpire as nouns interact according to a set of rules. A Sea Duck narrative
-consists of the following components:
+transpire as nouns interact according to a set of rules. At each step of the
+simulation, the state of the nouns (properties and relations) are checked, and
+then potentially changed, generating narrative events in the process, which are
+rendered as text using Tracery grammars. A Sea Duck narrative consists of the
+following components:
 
 * Nouns
 * Actions
@@ -163,7 +179,11 @@ exactly the matching name will be included, so:
 
 ### Yielding actions
 
-The `action` function should be a [generator
+Note that *updating parameters or manipulating relations* does not itself
+create narrative events. It's up to you to decide what changes to story state
+"mean" in terms of the events that they create.
+
+To that end, the `action` function should be a [generator
 function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*)
 that `yield`s `StoryEvent` objects. (Generator functions are used so that
 `actions` can potentially generate multiple events; you need to put a `*` after
