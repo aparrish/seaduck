@@ -1,0 +1,17 @@
+{
+  "name": "seaduck",
+  "version": "0.0.1",
+  "description": "A bare-bones simulation-driven narrative framework",
+  "homepage": "https://github.com/aparrish/seaduck",
+  "main": "seaduck.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Allison Parrish <allison@decontextualize.com>",
+  "license": "MIT",
+  "dependencies": {
+    "object-hash": "^1.3.0",
+    "tracery-grammar": "^2.7.3"
+  }
+}
