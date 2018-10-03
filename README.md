@@ -16,7 +16,18 @@ Internet Explorer probably won't work (but Edge probably will?). Sorry!
 
 ## Installation
 
-npm install from this git repo, or [download the bundle](FIXME).
+You can npm install from this git repo and `require('seaduck')` in your code:
+
+    npm install https://github.com/aparrish/seaduck --save
+
+Or you can [download the bundle](/build/seaduck-bundle.js) (click "Raw" and
+then `File > Save as...` or equivalent in your browser) and add it to your
+project with a `<script>` tag:
+
+    <script src="seaduck-bundle.js"></script>
+
+... which will create a global `seaduck` variable available to the rest of your
+JavaScript code.
 
 ## Examples
 
