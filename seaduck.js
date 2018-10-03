@@ -199,9 +199,20 @@ class Narrative {
       JSON.stringify(this.narrative.traceryDiscourse));
     if (ev.a) {
       discourseCopy["nounA"] = ev.a.name;
+      // copy properties as nounA_<propertyname>
+      for (let k in ev.a.properties) {
+        if (ev.a.properties.hasOwnProperty(k)) {
+          discourseCopy["nounA_"+k] = ev.a.properties[k];
+        }
+      }
     }
     if (ev.b) {
       discourseCopy["nounB"] = ev.b.name;
+      for (let k in ev.b.properties) {
+        if (ev.b.properties.hasOwnProperty(k)) {
+          discourseCopy["nounB_"+k] = ev.b.properties[k];
+        }
+      }
     }
     let grammar = tracery.createGrammar(discourseCopy);
     grammar.addModifiers(tracery.baseEngModifiers);
