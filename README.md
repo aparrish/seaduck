@@ -36,6 +36,17 @@ this repo, you can run them like so:
 
     node examples/01_basic.js
 
+The examples are also available in adapted form on the [p5.js web
+editor](https://editor.p5js.org/):
+
+* [Example 1: The Basics](https://editor.p5js.org/allison.parrish/sketches/ByC_daWcX)
+* [Example 2: With
+  tags](https://editor.p5js.org/allison.parrish/sketches/S15I3TbcQ)
+* [Example 3:
+  Relations](https://editor.p5js.org/allison.parrish/sketches/Hkrhppb9X)
+* [Example 4: Rooms and
+  objects](https://editor.p5js.org/allison.parrish/sketches/BJflApbcm)
+
 ## Concepts and usage
 
 The purpose of a Sea Duck narrative is to generate sentences from events that
