@@ -31,17 +31,11 @@ class Narrative {
     this.stateHistory = [];
   }
   choice(t) {
+    // convenience function for selecting among alternatives in a list
     return t[Math.floor(Math.random()*t.length)];
   }
-  remove(obj) {
-    for (let i = this.narrative.nouns.length - 1; i >= 0; i--) {
-      //console.log(i, this.narrative.nouns[i], obj);
-      if (this.narrative.nouns[i] == obj) {
-        this.narrative.nouns.splice(i, 1);
-      }
-    }
-  }
   noun(name) {
+    // get the noun object in the narrative with the corresponding name
     for (let noun of this.narrative.nouns) {
       if (noun.name == name) {
         return noun;
@@ -49,6 +43,7 @@ class Narrative {
     }
   }
   getNounsByTag(tag) {
+    // get all nouns in the narrative with this tag
     let matches = [];
     for (let noun of this.narrative.nouns) {
       if (noun.tags.includes(tag)) {
@@ -58,6 +53,7 @@ class Narrative {
     return matches;
   }
   getNounsByProperty(prop, val) {
+    // get all nouns with this property
     let matches = [];
     for (let noun of this.narrative.nouns) {
       if (noun.properties[prop] == val) {
@@ -67,34 +63,42 @@ class Narrative {
     return matches;
   }
   relate(rel, a, b) {
+    // relate a to b with relation rel
     this.relations.set(mk([rel, a.name, b.name]), true)
   }
   unrelate(rel, a, b) {
+    // remove relation rel between a and b
     this.relations.delete(mk([rel, a.name, b.name]));
   }
   unrelateByTag(rel, a, bTag) {
+    // remove relation rel between a and nouns tagged with bTag 
     for (let noun of this.allRelatedByTag(rel, a, bTag)) {
       this.unrelate(rel, a, noun);
     }
   }
   reciprocal(rel, a, b) {
+    // relate a to b reciprocally with relation rel
     this.relations.set(mk([rel, a.name, b.name]), true)
     this.relations.set(mk([rel, b.name, a.name]), true)
   }
   unreciprocal(rel, a, b) {
+    // remove reciprocal relation rel between a and b
     this.relations.delete(mk([rel, a.name, b.name]))
     this.relations.delete(mk([rel, b.name, a.name]))
   }
   unreciprocalByTag(rel, a, bTag) {
+    // remove reciprocal relation rel between a and nouns tagged with bTag 
     for (let noun of this.allRelatedByTag(rel, a, bTag)) {
       this.unrelate(rel, a, noun);
       this.unrelate(rel, noun, a);
     }
   }
   isRelated(rel, a, b) {
+    // return true if a and b are related with rel
     return this.relations.get(mk([rel, a.name, b.name]))
   }
   allRelatedByTag(rel, a, bTag) {
+    // returns all nouns related to a by rel with tag bTag
     let matches = [];
     let byTag = this.getNounsByTag(bTag);
     for (let b of byTag) {
@@ -105,9 +109,11 @@ class Narrative {
     return matches;
   }
   relatedByTag(rel, a, bTag) {
+    // returns only the first noun related to a by rel with tag bTag
     return this.allRelatedByTag(rel, a, bTag)[0];
   }
   init() {
+    // call the initialize function and add events to history
     let events = [];
     let boundInit = this.narrative.initialize.bind(this);
     for (let sEvent of boundInit()) {
@@ -117,6 +123,7 @@ class Narrative {
     return events;
   }
   step() {
+    // step through the simulation
     // do nothing if story is over
     if (this.eventHistory.length > 0 &&
       this.eventHistory[this.eventHistory.length-1].ending()) {
@@ -129,6 +136,7 @@ class Narrative {
     }
 
     let events = [];
+    // for matches with two parameters
     for (let action of this.narrative.actions) {
       if (action.match.length == 2) {
         let matchingA = this.narrative.nouns.filter(
@@ -151,6 +159,7 @@ class Narrative {
           }
         }
       }
+    // for matches with one parameter
       else if (action.match.length == 1) {
         let matching = this.narrative.nouns.filter(
           function(item) { return filterTagMatch(action.match[0], item); });
@@ -166,20 +175,26 @@ class Narrative {
         }
       }
     }
+
+    // hash the current state and store 
     this.stateHistory.push(hash(this.narrative.nouns) + hash(this.relations));
+
     this.stepCount++;
 
     // if the last two states are identical, or no events generated, the end
     let shLen = this.stateHistory.length;
     if (
-      (shLen >= 2 && this.stateHistory[shLen-1] == this.stateHistory[shLen-2]) ||
-      events.length == 0) {
+        (shLen >= 2 && this.stateHistory[shLen-1] == this.stateHistory[shLen-2]) ||
+        events.length == 0) {
+      // _end is a special sentinel value to signal the end of the narration
       this.eventHistory.push(new StoryEvent("_end"));
       events.push(new StoryEvent("_end"));
     }
+
     return events;
   }
   renderEvent(ev) {
+    // renders an event using the associated tracery rule
     let discourseCopy = JSON.parse(
       JSON.stringify(this.narrative.traceryDiscourse));
     if (ev.a) {
@@ -193,6 +208,7 @@ class Narrative {
     return grammar.flatten("#"+ev.verb+"#");
   }
   stepAndRender() {
+    // combines step() and renderEvent()
     let events = this.step();
     let rendered = [];
     for (let ev of events) {
