@@ -296,7 +296,7 @@ an event with this verb from an `action` function. Subsequent calls to
 A typical loop for stepping through the narration simulation might look like
 this:
 
-    let n = seaduck.Narrative(...your narration specification here...);
+    let n = new seaduck.Narrative(...your narration specification here...);
     let maxSteps = 100; // maximum number of steps to perform
 
     for (let i = 0; i < maxSteps; i++) {
